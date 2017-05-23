@@ -20,6 +20,7 @@ int main () {
 	vector<unsigned> topology;
 	topology.push_back(2);
 	topology.push_back(4);
+	topology.push_back(4);
 	topology.push_back(1);
 
 
@@ -30,6 +31,7 @@ int main () {
 	double error = 10;
 	int iter = 0;
 	// Exemplo com XOR
+
 	while (error > 0.05) { // Pode só colocar aqui tb pra garantir && iter < 2000) {
 		error = 0;
 		iter++;
@@ -140,7 +142,7 @@ int main () {
 	myNet.getResults(resultVals);
 
 	cout << "=======================\n" << "Entry: 1 1" << endl << "Output: " << resultVals[0]
-			<< "\nAfter TransferFunction: "  << step05(resultVals[0]) << endl;;
+			<< "\nAfter TransferFunction: "  << step05(resultVals[0]) << endl;
 }
 
 

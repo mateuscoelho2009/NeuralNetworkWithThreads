@@ -17,7 +17,7 @@ using namespace std;
 
 class Neuron {
 public:
-	typedef vector<Neuron> Layer;
+	typedef vector<Neuron *> Layer;
 
 	Neuron(unsigned numOutputs, unsigned myIndex);
 	virtual ~Neuron();
@@ -58,10 +58,10 @@ private:
 
 	double m_outputVal, m_gradient;
 	unsigned m_myIndex;
-	vector<Connection> m_outputWeights;
+	vector<Connection *> m_outputWeights;
 
 };
 
-typedef vector<Neuron> Layer;
+typedef vector<Neuron *> Layer;
 
 #endif /* NEURON_H_ */

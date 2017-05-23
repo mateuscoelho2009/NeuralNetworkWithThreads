@@ -25,7 +25,7 @@ public:
 
 	double m_error, m_recentAverageError, m_recentAverageSmoothingFactor;
 private:
-	vector<Layer> m_layers; // m_layers[numLayer][numNeuron]
+	vector<Layer *> m_layers; // m_layers[numLayer][numNeuron]
 };
 
 #endif /* NET_H_ */

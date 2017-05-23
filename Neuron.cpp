@@ -6,14 +6,22 @@
  */
 
 #include "Neuron.h"
+#include <iostream>
+
+using namespace std;
 
 double Neuron::eta = 0.15;
 double Neuron::alpha = 0.5;
 
 Neuron::Neuron(unsigned numOutputs, unsigned myIndex) {
 	for (unsigned i = 0; i < numOutputs; i++) {
-		m_outputWeights.push_back (Connection());
-		m_outputWeights.back().weight = randomWeight();
+		Connection *novaConexao = new Connection();
+
+		if (novaConexao == NULL)
+			cout << "Nova conexão não alocada.. \n" << endl;
+
+		m_outputWeights.push_back (new Connection());
+		m_outputWeights.back()->weight = randomWeight();
 	}
 
 	m_myIndex = myIndex;
@@ -27,8 +35,8 @@ void Neuron::feedForward(const Layer &prevLayer) {
 	double sum = 0.0;
 
 	for (unsigned n = 0; n < prevLayer.size(); n++) {
-		double aux = prevLayer[n].getOutputVal();
-		sum += aux * prevLayer[n].m_outputWeights[m_myIndex].weight;
+		double aux = prevLayer[n]->getOutputVal();
+		sum += aux * prevLayer[n]->m_outputWeights[m_myIndex]->weight;
 	}
 
 	m_outputVal = Neuron::transferFunction(sum);
@@ -44,7 +52,7 @@ double Neuron::sumDOW (const Layer &nextLayer) const {
 
 	// soma das contribuições aos nós alimentados
 	for (unsigned n = 0; n < nextLayer.size() - 1; n++) {
-		sum += m_outputWeights[n].weight * nextLayer[n].getGradient();
+		sum += m_outputWeights[n]->weight * nextLayer[n]->getGradient();
 	}
 
 	return sum;
@@ -52,7 +60,7 @@ double Neuron::sumDOW (const Layer &nextLayer) const {
 
 void Neuron::updateInputWeights(Layer &prevLayer) {
 	for (unsigned n = 0; n < prevLayer.size(); n++) {
-		Neuron &neuron = prevLayer[n];
+		Neuron &neuron = (*prevLayer[n]);
 
 		/*
 		 * eta = 0.0 (aprendizado lento)
@@ -62,7 +70,7 @@ void Neuron::updateInputWeights(Layer &prevLayer) {
 		 * alpha = 0.0 (sem momentum)
 		 * 		   0.5 (momentum moderado)
 		 */
-		double oldDeltaWeight = neuron.m_outputWeights[m_myIndex].deltaWeight;
+		double oldDeltaWeight = neuron.m_outputWeights[m_myIndex]->deltaWeight;
 		double newDeltaWeight = eta // Overrall Learning Rate
 								* neuron.getOutputVal()
 								* m_gradient
@@ -70,7 +78,7 @@ void Neuron::updateInputWeights(Layer &prevLayer) {
 								+ alpha
 								* oldDeltaWeight;
 
-		neuron.m_outputWeights[m_myIndex].deltaWeight = newDeltaWeight;
-		neuron.m_outputWeights[m_myIndex].weight += newDeltaWeight;
+		neuron.m_outputWeights[m_myIndex]->deltaWeight = newDeltaWeight;
+		neuron.m_outputWeights[m_myIndex]->weight += newDeltaWeight;
 	}
 }
